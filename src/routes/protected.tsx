@@ -1,0 +1,28 @@
+import { Suspense } from 'react'
+import { Navigate, Outlet, RouteObject } from 'react-router-dom'
+import FullPageLoading from '@/components/misc/FullPageLoading'
+import { dashboardRoutes } from '@/features/dashboard'
+import { profileRoutes } from '@/features/profile'
+import MainLayout from '@/layouts/MainLayout'
+
+const App = () => {
+  return (
+    <MainLayout>
+      <Suspense fallback={<FullPageLoading />}>
+        <Outlet />
+      </Suspense>
+    </MainLayout>
+  )
+}
+
+export const protectedRoutes: RouteObject[] = [
+  {
+    path: '/app',
+    element: <App />,
+    children: [
+      { path: 'profile', children: profileRoutes },
+      { path: '', children: dashboardRoutes },
+      { path: '*', element: <Navigate to="." /> }
+    ]
+  }
+]
